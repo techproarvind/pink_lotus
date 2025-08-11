@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "pinklotus-c3b2e",
+    "com.example.pinklotus": "pinklotus-9d303"
+  },
+  "targets": {},
+  "etags": {}
+}
