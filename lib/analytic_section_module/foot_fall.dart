@@ -1,5 +1,3 @@
-
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -15,10 +13,7 @@ Widget buildChartFootFallFirst(
   double averageValue,
   String _selectedFilterCValuePasss,
 ) {
-
-
-
-double getNiceInterval(double maxY, int divisions) {
+  double getNiceInterval(double maxY, int divisions) {
     if (maxY == 0) return 1;
 
     double roughInterval = maxY / divisions;
@@ -39,7 +34,7 @@ double getNiceInterval(double maxY, int divisions) {
   }
 
   // Calculate min/max values safely
-double minX = 0;
+  double minX = 0;
   double maxX = (labels.length - 1).toDouble();
   double maxY =
       values.isNotEmpty
@@ -47,8 +42,6 @@ double minX = 0;
           : 100;
 
   double yInterval = getNiceInterval(maxY, 5);
-
-
 
   return Row(
     children: [
@@ -130,11 +123,13 @@ double minX = 0;
                   showTitles: true,
                   reservedSize: 30,
                   interval:
-                      _selectedFilterCValuePasss == "1D"
-                          ? 2
-                          : _selectedFilterCValuePasss == "1W"
-                          ? 1
-                          : 3,
+                      labels.length <= 30
+                          ? _selectedFilterCValuePasss == "1D"
+                              ? 2
+                              : _selectedFilterCValuePasss == "1W"
+                              ? 1
+                              : 3
+                          : 20,
                   getTitlesWidget: (value, meta) {
                     final index = value.toInt();
                     if (index >= 0 && index < labels.length) {

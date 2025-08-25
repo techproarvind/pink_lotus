@@ -190,6 +190,7 @@ class GenderInsightService {
     required List<String> selection,
     required List<String> stores,
     required List<String> days,
+    required List<String> zones,
     required DateTime fromDate,
     required DateTime toDate,
   }) async {
@@ -203,6 +204,7 @@ class GenderInsightService {
       'fromDate=$passFromDate',
       'toDate=$passToDate',
       ...selection.map((e) => 'selectedSections=$e'),
+      ...zones.map((e) => 'selectedZones=$e'),
       ...stores.map((e) => 'selectedStores=$e'),
       ...days.map((e) => 'selectedDays=$e'),
       ...hours.map((e) => 'selectedHours=$e'),

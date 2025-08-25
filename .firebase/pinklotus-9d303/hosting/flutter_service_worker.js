@@ -3,11 +3,11 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "0218903426dd5bb9b700a93804d4b9ff",
+const RESOURCES = {"flutter_bootstrap.js": "c2969d219fa0ccb76c2b4396b43f5a59",
 "version.json": "64db5ecdecf13ace9453f3d27547697e",
 "index.html": "df64a316dce04b026514d04d5d1f0adb",
 "/": "df64a316dce04b026514d04d5d1f0adb",
-"main.dart.js": "ea41c6bc4400b9546d29fe0667f83bc4",
+"main.dart.js": "9d9688e0a91cc02215fccdeb71cb9f3f",
 "flutter.js": "76f08d47ff9f5715220992f993002504",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
@@ -24,7 +24,7 @@ const RESOURCES = {"flutter_bootstrap.js": "0218903426dd5bb9b700a93804d4b9ff",
 "assets/packages/fluttertoast/assets/toastify.css": "a85675050054f179444bc5ad70ffc635",
 "assets/shaders/ink_sparkle.frag": "ecc85a2e95f5e9f53123dcaf8cb9b6ce",
 "assets/AssetManifest.bin": "787e7f7179e1926ff87dbb6311d5b553",
-"assets/fonts/MaterialIcons-Regular.otf": "f1cacb5d199250aab81c956f8bd18074",
+"assets/fonts/MaterialIcons-Regular.otf": "d1beed9148e6e8531123d83972f38807",
 "assets/assets/formfull.png": "10ca15c517b1b62c5e7f204980586aac",
 "assets/assets/buy%2520button.png": "c866d3bf0b35bdd6a500cb6298053dc1",
 "assets/assets/Group%25205.png": "8910e5a7972d391ec9437a92cd75c0bc",

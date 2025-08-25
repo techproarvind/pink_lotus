@@ -23,6 +23,8 @@ import 'package:pinklotus/analytic_section_module/self_data/self_data_model.dart
 import 'package:pinklotus/analytic_section_module/self_data/self_data_ui.dart';
 import 'package:pinklotus/analytic_section_module/time_spent_model.dart';
 import 'package:pinklotus/analytic_section_module/time_stamp_page.dart';
+import 'package:pinklotus/analytic_section_module/week_summary_report/alert_review_report.dart';
+import 'package:pinklotus/analytic_section_module/week_summary_report/weekly_summery_report.dart';
 import 'package:pinklotus/analytics_module_main_page/analytics_main_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:pinklotus/network_call/base_network.dart';
@@ -44,6 +46,26 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
   List<dynamic> labels = [];
   List<int> values = [];
   bool isLoadingMainGraph = true;
+  List<String> _selectedItems = [];
+  List<String> _selectedItemsPass = [];
+  List<String> _selectedStore = [];
+  List<String> _selectedHours = [];
+  List<String> _selectedDays = [];
+  List<String> _selectedZones = [];
+  List<int> _selectedDaysPass = [];
+  List<int> _selectedHoursPass = [];
+  AlertReviewModel? alertResponse;
+  String insigethGenderData = '';
+  GenderInsightsModel? insightData;
+  TimeSpentModel? insightDataTimeSpent;
+  InsightAgeGroupModel? insightDataAgeGroupRange;
+  InsightAgeGroupModel? insightDataAgeGroupRangeFilter;
+  AgeGroupFilterModel? filterAgeGroup;
+  AgeGroupModelData? ageGroup;
+
+  GenderInsightsModelFilter? insightDataFilter;
+  bool isFilter = false;
+  var data = {};
 
   bool averageShow = true;
   bool maleShow = true;
@@ -109,26 +131,6 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
     _removeDropdown4();
     super.dispose();
   }
-
-  List<String> _selectedItems = [];
-  List<String> _selectedItemsPass = [];
-  List<String> _selectedStore = ["GMRHDF"];
-  List<String> _selectedHours = [];
-  List<String> _selectedDays = [];
-  List<int> _selectedDaysPass = [];
-  List<int> _selectedHoursPass = [];
-  AlertReviewModel? alertResponse;
-  String insigethGenderData = '';
-  GenderInsightsModel? insightData;
-  TimeSpentModel? insightDataTimeSpent;
-  InsightAgeGroupModel? insightDataAgeGroupRange;
-  InsightAgeGroupModel? insightDataAgeGroupRangeFilter;
-  AgeGroupFilterModel? filterAgeGroup;
-  AgeGroupModelData? ageGroup;
-
-  GenderInsightsModelFilter? insightDataFilter;
-  bool isFilter = false;
-  var data = {};
 
   Future<void> fetchFootFallData() async {
     if (mounted) {
@@ -421,6 +423,7 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
       hours: _selectedHours,
       selection: _selectedItemsPass,
       stores: _selectedStore,
+      zones: _selectedZones,
     );
     print("data: $data");
     if (mounted) {
@@ -913,7 +916,7 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
                           ),
                         )
                         : tableContewntViewAlertReview(context, alertResponse!),
-                  if (index == 3) AnalyticsMainPage(),
+                  if (index == 3) WeeklyReportScreen(),
                 ],
               ),
             ),
@@ -947,6 +950,16 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
           setState(() {
             _selectedFilter = text;
             _selectedFilterCValuePasss = passwvalue;
+
+            fromDate = null;
+            toDate = null;
+            _selectedStore = [];
+            _selectedZones = [];
+            _selectedItems = [];
+            _selectedDays = [];
+            _selectedHours = [];
+            _selectedDaysPass = [];
+            _selectedHoursPass = [];
             print("selectionINdex: $selectionINdex");
             if (selectionINdex == 0) {
               fetchFootFallData();
@@ -1014,6 +1027,15 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
                         _selectedFilterCValuePasss = "1D";
                         _selectedFilter = "1 Day";
                         _buildTimeButton("1 Day", "1D");
+                        fromDate = null;
+                        toDate = null;
+                        _selectedStore = [];
+                        _selectedZones = [];
+                        _selectedItems = [];
+                        _selectedDays = [];
+                        _selectedHours = [];
+                        _selectedDaysPass = [];
+                        _selectedHoursPass = [];
                         if (selectionINdex == 0) {
                           fetchFootFallData();
                         } else if (selectionINdex == 1) {
@@ -1444,6 +1466,8 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
                               onTap:
                                   selectionINdex == 5
                                       ? _toggleDropdownShelfData
+                                      : selectionINdex == 4
+                                      ? _toggleDropdowntimeSpentData
                                       : _toggleDropdown,
                               child: Container(
                                 key: _key,
@@ -1475,6 +1499,54 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
                             ),
                           ),
                         ),
+                        if (selectionINdex == 4) SizedBox(height: 14),
+                        if (selectionINdex == 4)
+                          Text(
+                            'Section',
+                            style: GoogleFonts.oxygen(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        if (selectionINdex == 4) SizedBox(height: 8),
+                        if (selectionINdex == 4)
+                          SizedBox(
+                            height: 50,
+                            width: MediaQuery.sizeOf(context).width,
+                            child: CompositedTransformTarget(
+                              link: _layerLink5,
+                              child: GestureDetector(
+                                onTap: _toggleDropdown5,
+                                child: Container(
+                                  key: _key5,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 14,
+                                  ),
+                                  width: 250,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          _selectedZones.isEmpty
+                                              ? 'Select Section'
+                                              : _selectedZones.join(', '),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const Icon(Icons.arrow_drop_down),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
                         SizedBox(height: 14),
                         Text(
                           'Day Of Week',
@@ -1662,6 +1734,7 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
                                   fromDate = null;
                                   toDate = null;
                                   _selectedStore = [];
+                                  _selectedZones = [];
                                   _selectedItems = [];
                                   _selectedDays = [];
                                   _selectedHours = [];
@@ -1746,6 +1819,8 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
     'CHOCOLATE',
   ];
 
+  final List<String> _itemsTimeSpentData = ['BILLING', 'STORE_TIMESPENT'];
+
   final List<String> daysOfWeek = [
     'Monday',
     'Tuesday',
@@ -1754,6 +1829,17 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
     'Friday',
     'Saturday',
     'Sunday',
+  ];
+
+  final List<String> _itemSelectionZones = [
+    'BILLING_COUNTER_2',
+    'BILLING_COUNTER_3',
+    'BILLING_COUNTER_4',
+    'BILLING_COUNTER_5',
+    'BILLING_COUNTER_6',
+    'BILLING_COUNTER_7',
+    'BILLING_COUNTER_8',
+    'STORE_TIMESPENT',
   ];
 
   final List<String> _storeName = ['GMRHDF'];
@@ -1790,6 +1876,7 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
 
   final LayerLink _layerLink = LayerLink();
   final LayerLink _layerLink2 = LayerLink();
+  final LayerLink _layerLink5 = LayerLink();
   final LayerLink _layerLink3 = LayerLink();
   final LayerLink _layerLink4 = LayerLink();
 
@@ -1797,11 +1884,21 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
   OverlayEntry? _overlayEntry2;
   OverlayEntry? _overlayEntry3;
   OverlayEntry? _overlayEntry4;
+  OverlayEntry? _overlayEntry5;
 
   final GlobalKey _key = GlobalKey();
   final GlobalKey _key2 = GlobalKey();
   final GlobalKey _key3 = GlobalKey();
   final GlobalKey _key4 = GlobalKey();
+  final GlobalKey _key5 = GlobalKey();
+
+  void _toggleDropdown5() {
+    if (_overlayEntry5 == null) {
+      _showDropdown5();
+    } else {
+      _removeDropdown5();
+    }
+  }
 
   void _toggleDropdown4() {
     if (_overlayEntry4 == null) {
@@ -1830,6 +1927,14 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
   void _toggleDropdownShelfData() {
     if (_overlayEntry == null) {
       _showDropdownShelfData();
+    } else {
+      _removeDropdown();
+    }
+  }
+
+  void _toggleDropdowntimeSpentData() {
+    if (_overlayEntry == null) {
+      _showDropdownTimeSpentData();
     } else {
       _removeDropdown();
     }
@@ -1902,6 +2007,58 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
     );
 
     Overlay.of(context).insert(_overlayEntry3!);
+  }
+
+  void _showDropdown5() {
+    final renderBox = _key5.currentContext!.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+
+    _overlayEntry5 = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          width: size.width,
+          child: CompositedTransformFollower(
+            link: _layerLink5,
+            showWhenUnlinked: false,
+            offset: Offset(0.0, size.height + 5.0),
+            child: Material(
+              elevation: 4,
+              borderRadius: BorderRadius.circular(6),
+              child: SizedBox(
+                height: 200,
+                child: StatefulBuilder(
+                  builder: (context, localSetState) {
+                    return ListView(
+                      padding: EdgeInsets.zero,
+                      children:
+                          _itemSelectionZones.map((item) {
+                            final isSelected = _selectedZones.contains(item);
+                            return CheckboxListTile(
+                              value: isSelected,
+                              title: Text(item),
+                              onChanged: (checked) {
+                                setState(() {
+                                  if (checked == true) {
+                                    _selectedZones.add(item);
+                                  } else {
+                                    _selectedZones.remove(item);
+                                  }
+                                });
+                                localSetState(() {});
+                              },
+                            );
+                          }).toList(),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    Overlay.of(context).insert(_overlayEntry5!);
   }
 
   void _showDropdown4() {
@@ -2184,6 +2341,76 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
     Overlay.of(context).insert(_overlayEntry!);
   }
 
+  void _showDropdownTimeSpentData() {
+    final renderBox = _key.currentContext!.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          width: size.width,
+          child: CompositedTransformFollower(
+            link: _layerLink,
+            showWhenUnlinked: false,
+            offset: Offset(0.0, size.height + 5.0),
+            child: Material(
+              elevation: 4,
+              borderRadius: BorderRadius.circular(6),
+              child: SizedBox(
+                height: 200,
+                child: StatefulBuilder(
+                  builder: (context, localSetState) {
+                    return ListView(
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      children:
+                          _itemsTimeSpentData.map((item) {
+                            final isSelected = _selectedItems.contains(item);
+                            return CheckboxListTile(
+                              value: isSelected,
+                              title: Text(item),
+                              onChanged: (checked) {
+                                setState(() {
+                                  if (checked == true) {
+                                    if (item == "BILLING") {
+                                      _selectedItemsPass.add("BILLING_COUNTER");
+                                    } else if (item == "CHOCOLATE") {
+                                      _selectedItemsPass.add("CHOCOLATES");
+                                    } else {
+                                      _selectedItemsPass.add(item);
+                                    }
+                                    _selectedItems.add(item);
+                                  } else {
+                                    if (item == "BILLING") {
+                                      _selectedItemsPass.remove(
+                                        "BILLING_COUNTER",
+                                      );
+                                    } else if (item == "CHOCOLATE") {
+                                      _selectedItemsPass.remove("CHOCOLATES");
+                                    } else {
+                                      _selectedItemsPass.remove(item);
+                                    }
+                                    _selectedItems.remove(item);
+                                  }
+                                });
+                                localSetState(() {});
+                              },
+                            );
+                          }).toList(),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
   void _removeDropdown() {
     _overlayEntry?.remove();
     _overlayEntry = null;
@@ -2204,144 +2431,12 @@ class _AnalyticsSectionState extends State<AnalyticsSection>
     _overlayEntry4 = null;
   }
 
+  void _removeDropdown5() {
+    _overlayEntry5?.remove();
+    _overlayEntry5 = null;
+  }
+
   int selectionINdex = 0;
 
-  Widget _buildStatusChip(String status) {
-    return Row(
-      children: [
-        Image.asset("assets/Group 5.png", width: 100, height: 12),
-        SizedBox(width: 14),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xffF55772)),
-            color: Color(0xffFFF1F2),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(
-            status,
-            style: const TextStyle(
-              color: Color(0xffF43F5E),
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatusChipRed(String status) {
-    return Row(
-      children: [
-        Image.asset("assets/Group 6.png", width: 100, height: 12),
-        SizedBox(width: 14),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFF3AC47D)),
-            color: Color.fromARGB(255, 231, 241, 236),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(
-            status,
-            style: const TextStyle(
-              color: Color(0xFF3AC47D),
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   int tableINdex = 0;
-  Widget tableContewntViewAlertReview(context, AlertReviewModel response) {
-    print("response: $response");
-    return Container(
-      height: MediaQuery.sizeOf(context).height / 1.4,
-      width: MediaQuery.sizeOf(context).width,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(16)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: MediaQuery.of(context).size.width / 1.2,
-          ),
-
-          child: DataTable(
-            headingRowHeight: 48,
-            dataRowHeight: 48,
-            columnSpacing: 24,
-            headingTextStyle: const TextStyle(
-              color: Color(0xFF3A3F51),
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-            dataTextStyle: const TextStyle(
-              color: Color(0xFF3A3F51),
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-            ),
-
-            columns: [
-              const DataColumn(
-                headingRowAlignment: MainAxisAlignment.spaceBetween,
-                label: Text('No'),
-              ),
-              const DataColumn(
-                headingRowAlignment: MainAxisAlignment.spaceBetween,
-                label: Text('Date'),
-              ),
-
-              const DataColumn(
-                headingRowAlignment: MainAxisAlignment.spaceBetween,
-                label: Text('No Of Notification'),
-              ),
-              const DataColumn(
-                headingRowAlignment: MainAxisAlignment.spaceBetween,
-                label: Text('Resolve %'),
-              ),
-
-              DataColumn(
-                headingRowAlignment: MainAxisAlignment.spaceBetween,
-                label: Text("Resolve %"),
-              ),
-            ],
-            rows:
-                response.dailyData?.asMap().entries.map((entry) {
-                  final index = entry.key + 1; // +1 to start from 1
-                  final e = entry.value;
-
-                  return DataRow(
-                    cells: [
-                      DataCell(Text(index.toString())),
-                      DataCell(Text(e.date ?? '')), // from your model
-                      DataCell(Text(e.notifications?.toString() ?? '0')),
-                      DataCell(_buildStatusChip("${e.resolvePercent ?? 0}%")),
-                      DataCell(
-                        _buildStatusChipRed("${e.resolvePercent ?? 0}%"),
-                      ),
-                    ],
-                  );
-                }).toList() ??
-                [],
-          ),
-        ),
-      ),
-    );
-  }
 }

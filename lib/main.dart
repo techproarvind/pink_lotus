@@ -44,18 +44,19 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> checkLogin() async {
-    await Future.delayed(const Duration(milliseconds: 10)); // Simulate splash delay
+    await Future.delayed(
+      const Duration(milliseconds: 10),
+    ); // Simulate splash delay
     final token = await LocalStorage.getToken();
 
     if (token != null && token.isNotEmpty) {
-       Navigator.pushReplacement(
+      Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) =>  DashboardScreen(),
+          pageBuilder: (context, _, __) => DashboardScreen(),
           transitionDuration: Duration.zero, // No animation
         ),
       );
-   
     } else {
       Navigator.pushReplacement(
         context,

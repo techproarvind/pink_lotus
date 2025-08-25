@@ -104,11 +104,13 @@ class _GenderInsightChartState extends State<GenderInsightChart> {
                                 sideTitles: SideTitles(
                                   showTitles: true,
                                   interval:
-                                      widget.duration == "1D"
-                                          ? 2
-                                          : widget.duration == "1W"
-                                          ? 1
-                                          : 5,
+                                      widget.insightData!.labels.length <= 30
+                                          ? widget.duration == "1D"
+                                              ? 2
+                                              : widget.duration == "1W"
+                                              ? 1
+                                              : 5
+                                          : 30,
 
                                   getTitlesWidget: (value, meta) {
                                     final index = value.toInt();

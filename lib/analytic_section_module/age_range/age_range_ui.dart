@@ -129,11 +129,22 @@ class AgeRangeLineChart extends StatelessWidget {
                           showTitles: true,
 
                           interval:
-                              duration == "1D"
-                                  ? 3
-                                  : duration == "1W"
-                                  ? 7
-                                  : 10,
+                              isFilter
+                                  ? insightDataAgeGroupFilter!.labels.length <=
+                                          30
+                                      ? duration == "1D"
+                                          ? 3
+                                          : duration == "1W"
+                                          ? 7
+                                          : 30
+                                      : 30
+                                  : insightDataAgeGroup!.labels.length <= 30
+                                  ? duration == "1D"
+                                      ? 3
+                                      : duration == "1W"
+                                      ? 7
+                                      : 30
+                                  : 30,
                           getTitlesWidget: (value, meta) {
                             final index = value.toInt();
                             final labelList =

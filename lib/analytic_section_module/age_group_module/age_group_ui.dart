@@ -107,11 +107,17 @@ class _AgeGroupAdultChildDataState extends State<AgeGroupAdultChildData> {
                                 sideTitles: SideTitles(
                                   showTitles: true,
                                   interval:
-                                      widget.duration == "1D"
-                                          ? 2
-                                          : widget.duration == "1W"
-                                          ? 1
-                                          : 5,
+                                      widget
+                                                  .insightDataAgeGroup!
+                                                  .labels
+                                                  .length <=
+                                              30
+                                          ? widget.duration == "1D"
+                                              ? 2
+                                              : widget.duration == "1W"
+                                              ? 1
+                                              : 5
+                                          : 30,
 
                                   getTitlesWidget: (value, meta) {
                                     final index = value.toInt();
@@ -245,8 +251,8 @@ class _AgeGroupAdultChildDataState extends State<AgeGroupAdultChildData> {
                                         index <
                                             widget
                                                 .insightDataAgeGroupFilter!
-                                                .labels
-                                                !.length) {
+                                                .labels!
+                                                .length) {
                                       final label =
                                           widget
                                               .insightDataAgeGroupFilter!
@@ -262,18 +268,17 @@ class _AgeGroupAdultChildDataState extends State<AgeGroupAdultChildData> {
                                         );
                                       } else {
                                         // Day (for 1W, 1M)
-                                      return Text(
-                                        label.replaceAll(
-                                          " ",
-                                          "\n",
-                                        ), // Wrap label
-                                        style: GoogleFonts.oxygen(
-                                          fontSize: 8,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      );
+                                        return Text(
+                                          label.replaceAll(
+                                            " ",
+                                            "\n",
+                                          ), // Wrap label
+                                          style: GoogleFonts.oxygen(
+                                            fontSize: 8,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        );
                                       }
-                                    
                                     }
                                     return const Text('');
                                   },
@@ -411,7 +416,8 @@ class _AgeGroupAdultChildDataState extends State<AgeGroupAdultChildData> {
     ) {
       final adult =
           widget.insightDataAgeGroupFilter!.adultData![index].toDouble();
-      final kids = widget.insightDataAgeGroupFilter!.kidsData![index].toDouble();
+      final kids =
+          widget.insightDataAgeGroupFilter!.kidsData![index].toDouble();
       return BarChartGroupData(
         x: index,
 
